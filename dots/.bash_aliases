@@ -1,0 +1,12 @@
+alias la="~/.dot.setup/list_aliases.sh" # list all desc aliases in .bash_aliases
+alias dwl="cd ~/Downloads" # go to download folder
+alias wrk='f(){ cd ~/workspace/"$@" ;  unset -f f; }; f' # go to workspace folder
+alias updt="sudo apt update ; sudo apt dist-upgrade ; sudo apt upgrade -y ; sudo apt autoremove -y ; sudo apt autoclean -y" # do update, upgrade, dist-upgrade and autoclean
+alias setpyenv='f(){ pyenv install "$@"; pyenv global "$@"; pyenv local "$@" ; unset -f f; }; f' # install and set pyenv version
+alias hst="history|grep" # quick find in history
+alias cat="batcat" # change cat to batcat
+alias ips="ip -c -br a" # set friendly ip output
+alias ls="exa" # change ls to exa
+alias mkdir="mkdir -pv" # set mkdir to create folders in paht
+alias src="source ~/.zshrc ; source ~/.bash_aliases" # source principal bash files
+alias setop="python ~/.dot.setup/setthefuckup.py" # alias to .dot.setup script

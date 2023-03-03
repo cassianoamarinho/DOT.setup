@@ -1,0 +1,11 @@
+{
+    "python-version": "3.11.2",
+    "folders": [".icons"],
+    "files": [".bash_aliases", ".bash_logout", ".bashrc", ".gitconfig", ".profile", ".shell.pre-oh-my-zsh", ".tmux.conf", ".zshrc", ".zshrc.backup"],
+    "cryptofiles": [
+        ".python_history", ".psql_history", ".bash_history", ".zsh_history", 
+        ".ssh/id_rsa", ".ssh/id_rsa.pub", 
+        ".aws/config", ".aws/credentials",
+        ".kube/config", ".kube/gke_gcloud_auth_plugin_cache"
+    ]
+}
