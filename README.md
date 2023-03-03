@@ -27,7 +27,7 @@ Use the `DOT.setup` to backup, restore and install initial programs and files.
 - Run: 
 
   ```
-  $ git clone git@github.com:cassianoamarinho/dot.setup.git ~/.dot.setup
+  $ git clone https://github.com/cassianoamarinho/DOT.setup.git ~/.dot.setup
   ```
 
 ## Usage
@@ -35,7 +35,7 @@ Use the `DOT.setup` to backup, restore and install initial programs and files.
 ### Options:
 
 ```
-$ python setthefuckup.py -h
+$ python ~/.dot.setup/setthefuckup.py -h
 usage: setthefuckup.py [-h] [-n] command
 
 positional arguments:
@@ -52,25 +52,25 @@ options:
 #### Backup dot files whitout console log:
 
 ```
-$ python setthefuckup.py backup -n
+$ python ~/.dot.setup/setthefuckup.py backup -n
 ```
 
 #### Backup dot files with crypto.key:
 
 ```
-$ python setthefuckup.py backup -c
+$ python ~/.dot.setup/setthefuckup.py backup -c
 ```
 
 #### Generate a crypto.key:
 
 ```
-$ python setthefuckup.py keygen
+$ python ~/.dot.setup/setthefuckup.py keygen
 ```
 
 #### view the modified dot files:
 
 ```
-$ python setthefuckup.py status
+$ python ~/.dot.setup/setthefuckup.py status
 ```
 
 ## Credits
