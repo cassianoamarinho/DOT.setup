@@ -99,7 +99,7 @@ def backup():
 
 def restore():
     logs(f'restore in progress ####')
-    
+
     for folder in conf.get('folders'):
         shutil.copytree(f'{DOTS_DIR}/{folder}', f'{HOME_DIR}/{folder}', dirs_exist_ok=True)
 
@@ -127,7 +127,7 @@ def restore():
             with open(filename, 'wb') as dec_file:
                 dec_file.write(decrypted)
 
-
+            os.makedirs(os.path.dirname(f'{HOME_DIR}/{cryptofile}'), exist_ok=True)
             shutil.copy(filename, f'{HOME_DIR}/{cryptofile}')
 
             shutil.rmtree(TEMP_DIR)
@@ -141,25 +141,49 @@ def install():
     logs(f'installation in progress ####')
 
     #set up applications
-    os.system("sudo apt update; sudo apt install -y git kubectx tmux tmate zsh vim curl ubuntu-restricted-extras software-properties-common make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev pipenv")
+    os.system("sudo apt update; sudo apt upgrade -y; sudo apt install -y exa bat git tmux tmate zsh vim curl ubuntu-restricted-extras software-properties-common make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev pipenv")
     
-    os.system(f'cd ~/workspace/tools ; curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"')
+    os.system('sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"')
+    
+    os.system(f'mkdir -pv ~/workspace/tools ; cd ~/workspace/tools ; curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"')
     os.system(f"sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl")
-    os.system(f"rm kubectl ; cd")
+    os.system(f"rm kubectl")
 
-    os.system(f'cd ~/workspace/tools ; curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-419.0.0-linux-x86_64.tar.gz')
-    os.system(f'tar -xf google-cloud-cli-419.0.0-linux-x86.tar.gz')
-    os.system(f'/workspace/tools/google-cloud-sdk/install.sh')
-    os.system(f'rm google-cloud-cli-419.0.0-linux-x86.tar.gz ; cd')
+    os.system(f'curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-419.0.0-linux-x86_64.tar.gz')
+    os.system(f'tar -xf google-cloud-cli-419.0.0-linux-x86_64.tar.gz')
+    os.system(f'google-cloud-sdk/install.sh')
+    os.system(f'rm google-cloud-cli-419.0.0-linux-x86_64.tar.gz')
+
+    os.system(f'curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3')
+    os.system(f'chmod 700 get_helm.sh')
+    os.system(f'./get_helm.sh')
+    os.system(f'rm get_helm.sh ; cd')
 
     os.system(f'sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx')
     os.system(f'sudo ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx')
     os.system(f'sudo ln -s /opt/kubectx/kubens /usr/local/bin/kubens')
 
-    os.system(f'cd ~/workspace/tools ; curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3')
-    os.system(f'chmod 700 get_helm.sh')
-    os.system(f'./get_helm.sh')
-    os.system(f' rm get_helm.sh ; cd')
+    os.system("curl https://pyenv.run | bash;")
+
+    #syncthing
+    os.system("sudo curl -o /usr/share/keyrings/syncthing-archive-keyring.gpg https://syncthing.net/release-key.gpg")
+    os.system('echo "deb [signed-by=/usr/share/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list')
+    os.system("sudo apt update; sudo apt install syncthing")
+
+    os.system(f"pip3 install -r ~/.dot.setup/requirements.txt")
+    
+    args.cryptofiles = True
+    restore()
+    
+    os.system(f"chmod 600 ~/.ssh/id_rsa")
+
+    os.system(f"exit terminal in 5sec..")
+    os.system(f"sleep 5s ; exit")
+
+    #python install with pyenv
+    # os.system(f"pyenv install {PYTHON_VERSION}")
+    # os.system(f"pyenv global {PYTHON_VERSION}")
+    # os.system(f"pyenv local {PYTHON_VERSION}")
 
     ###########################
     # to-do # terraform setup #
@@ -171,21 +195,6 @@ def install():
     #
     # https://brain2life.hashnode.dev/how-to-install-tfenv-terraform-version-manager-on-ubuntu-os
 
-
-    os.system("curl https://pyenv.run | bash;")
-
-    #python install with pyenv
-    os.system(f"pyenv install {PYTHON_VERSION}")
-    os.system(f"pyenv global {PYTHON_VERSION}")
-    os.system(f"pyenv local {PYTHON_VERSION}")
-
-    os.system('sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"')
-
-    #syncthing
-    os.system("sudo curl -o /usr/share/keyrings/syncthing-archive-keyring.gpg https://syncthing.net/release-key.gpg")
-    os.system('echo "deb [signed-by=/usr/share/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list')
-    os.system("sudo apt update; sudo apt install syncthing")
-    
     ###########################
     # to-do # distro argument #
     ###########################
@@ -200,10 +209,6 @@ def install():
     #     os.system(f"wget -c https://github.com/Lafydev/wingpanel-indicator-ayatana/raw/master/com.github.lafydev.wingpanel-indicator-ayatana_2.0.8_odin.deb")
     #     os.system(f"sudo dpkg -i ./com.github.lafydev.wingpanel*.deb")
     #     os.system(f"mkdir -p ~/.config/autostart; cp /etc/xdg/autostart/indicator-application.desktop ~/.config/autostart/; sed -i 's/^OnlyShowIn.*/OnlyShowIn=Unity;GNOME;Pantheon;/' ~/.config/autostart/indicator-application.desktop;")
-    
-    restore()
-
-    os.system(f"chmod 600 ~/.ssh/id_rsa")
 
 
 def keygen():
@@ -217,10 +222,10 @@ def status():
 def main():
     opt = { 'backup':backup, 'restore':restore, 'install':install, 'keygen':keygen, 'status':status }
 
-    try:
-        opt.get(args.command)()
-    except:
-        logs("you choose only this options: install, restore, backup, keygen or status.")
+    # try:
+    opt.get(args.command)()
+    # except:
+    #     logs("you choose only this options: install, restore, backup, keygen or status.")
     
 
 if __name__ == '__main__':
