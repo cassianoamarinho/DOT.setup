@@ -171,11 +171,13 @@ def install():
     os.system("sudo apt update; sudo apt install syncthing")
 
     os.system(f"pip3 install -r ~/.dot.setup/requirements.txt")
-    
+
     args.cryptofiles = True
     restore()
     
     os.system(f"chmod 600 ~/.ssh/id_rsa")
+
+    os.system(f"cd ~/.dot.setup ; git remote set-url origin git@github.com:cassianoamarinho/DOT.setup.git ; cd")
 
     os.system(f"exit terminal in 5sec..")
     os.system(f"sleep 5s ; exit")
